@@ -12,6 +12,7 @@ export default function EditCoursePage({ params }: { params: { courseId: string 
     return (
         // Áp dụng container căn giữa tương tự ở đây
         <div className="flex flex-col justify-center items-center h-full">
+            <h1 className="text-3xl text-center font-bold mb-6">Chỉnh sửa môn học</h1>
             <div className="w-full max-w-4xl">
                 <CourseForm initialData={course} />
             </div>

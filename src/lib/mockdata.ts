@@ -1,9 +1,10 @@
 import { CourseDetail } from "@/types";
 
+// Trong file frontend/src/lib/mock-data.ts
 export const MOCK_TEACHERS = [
-  { id: 't1', name: 'PGS.TS. Nguyễn Thanh Tùng' },
-  { id: 't2', name: 'TS. Đặng Tuấn Linh' },
-  { id: 't3', name: 'ThS. Nguyễn Thị Thu Trang' },
+  { id: 't1', name: 'PGS.TS. Nguyễn Thanh Tùng', faculty: 'KHMT' },
+  { id: 't2', name: 'TS. Đặng Tuấn Linh', faculty: 'KTMT' },
+  { id: 't3', name: 'ThS. Nguyễn Thị Thu Trang', faculty: 'KTPM' },
 ];
 
 export const MOCK_COURSES: CourseDetail[] = [
@@ -11,6 +12,8 @@ export const MOCK_COURSES: CourseDetail[] = [
     id: 'it4440',
     code: 'IT4440',
     name: 'Phát triển ứng dụng Web',
+    faculty: 'KTPM', // Thêm dữ liệu
+    category: 'Chuyên ngành', // Thêm dữ liệu, hiển thị trên table
     description: 'Môn học cung cấp các kiến thức cơ bản về công nghệ Web, bao gồm các kiến thức nền tảng như HTML, CSS, JavaScript, và các công nghệ phía máy chủ như Node.js, Express, và cơ sở dữ liệu. Sinh viên sẽ được thực hành xây dựng một ứng dụng web hoàn chỉnh.',
     syllabusUrl: '/mock-data/it4440-syllabus.pdf', // Link giả đến file đề cương
     gradingStructure: '{"Quá trình": 10, "Thực hành": 10, "Giữa kì": 20, "Thi cuối kỳ": 60}',
@@ -28,6 +31,8 @@ export const MOCK_COURSES: CourseDetail[] = [
     id: 'it3100',
     code: 'IT3100',
     name: 'Lập trình hướng đối tượng',
+    faculty: 'KHMT', // Thêm dữ liệu
+    category: 'Cơ sở ngành', // Thêm dữ liệu
     description: 'Môn học tập trung vào các khái niệm cốt lõi của lập trình hướng đối tượng (OOP) như tính đóng gói, kế thừa, đa hình và trừu tượng. Ngôn ngữ chính được sử dụng là Java.',
     syllabusUrl: '/mock-data/it4440-syllabus.pdf', // Link giả đến file đề cương
     gradingStructure: '{"Quá trình": 10, "Bài tập": 20, "Thi giữa kỳ": 20, "Thi cuối kỳ": 50}',

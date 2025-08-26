@@ -4,6 +4,7 @@ export interface Teacher {
   id: string;
   name: string;
   description?: string;
+  faculty?: string; // Thêm dòng này
 }
 
 export interface Document {
@@ -27,6 +28,8 @@ export interface Course {
   description?: string; // Đây sẽ là mô tả dạng text
   syllabusUrl?: string; // Đây sẽ là link đến file PDF đề cương
   gradingStructure?: string;
+  faculty?: string;     // THÊM DÒNG NÀY
+  category?: string;    // THÊM DÒNG NÀY
   teachers: Teacher[]; // Chỉ cần thông tin cơ bản của giáo viên trong danh sách
   documents: Document[];
   reviews: Review[];

@@ -6,7 +6,7 @@ export default function Header() {
     <header className="bg-white/80 backdrop-blur-sm border-b sticky top-0 z-50">
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
         <Link href="/" className="text-xl font-bold text-slate-800">
-          UIT - CourseInfo
+          UIT - CoursesInfo
         </Link>
         <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
           <Link href="/" className="hover:text-primary transition-colors">Trang chủ</Link>
