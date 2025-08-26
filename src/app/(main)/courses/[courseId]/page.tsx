@@ -20,8 +20,7 @@ export default function CourseDetailPage({ params }: { params: { courseId: strin
       <div className="container mx-auto px-4 py-10">
         {/* Header của trang */}
         <div className="mb-8">
-          <p className="text-primary font-semibold">{course.code}</p>
-          <h1 className="text-4xl font-bold tracking-tight">{course.name}</h1>
+          <h1 className="text-4xl font-bold tracking-tight">{course.code} - {course.name}</h1>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
