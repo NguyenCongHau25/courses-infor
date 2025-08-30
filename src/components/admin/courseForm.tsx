@@ -5,22 +5,23 @@ import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/Input"; // Sửa lỗi viết hoa
+import { Input } from "@/components/ui/Input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { File, X } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { FACULTIES, COURSE_CATEGORIES } from "@/lib/constants"; // Import constants
+import { FACULTIES, COURSE_CATEGORIES } from "@/lib/constants";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"; // Import Select components
+} from "@/components/ui/select"; 
 
 interface CourseFormProps {
     initialData?: CourseDetail | null;
+    onFinished?: () => void; 
 }
 
 interface GradingComponents {
@@ -30,7 +31,7 @@ interface GradingComponents {
   final: number | null;
 }
 
-// Hàm helper để chuyển đổi từ JSON string cũ sang object mới
+
 const parseGradingStructure = (jsonString?: string | null): GradingComponents => {
     const initialState: GradingComponents = { process: null, practice: null, midterm: null, final: null };
     if (!jsonString) return initialState;
@@ -60,7 +61,7 @@ const formatGradingStructure = (grading: GradingComponents): string => {
     return Object.keys(result).length > 0 ? JSON.stringify(result) : "";
 }
 
-export default function CourseForm({ initialData }: CourseFormProps) {
+export default function CourseForm({ initialData, onFinished }: CourseFormProps) {
     const router = useRouter();
     const isEditMode = !!initialData;
 
@@ -107,15 +108,19 @@ export default function CourseForm({ initialData }: CourseFormProps) {
         // Cần có cách để reset input file, cách đơn giản là dùng key
     }
     const handleSubmit = (e: React.FormEvent) => {
-            e.preventDefault();
-            // ... (validation cấu trúc điểm giữ nguyên)
-            alert(
+        e.preventDefault();
+        // ... (validation cấu trúc điểm giữ nguyên)
+        alert(
             `Đã ${isEditMode ? 'cập nhật' : 'tạo mới'} môn học thành công!` +
             `\nKhoa quản lý: ${faculty}` +
             `\nPhân loại: ${category}`
-            );
-            router.push('/admin/courses');
-            router.refresh();
+        );
+        if (onFinished) {
+            onFinished();
+        }
+        // Nếu muốn giữ lại điều hướng cũ, có thể gọi router.push ở đây
+        // router.push('/admin/courses');
+        // router.refresh();
     }
     return (
         <form onSubmit={handleSubmit}>

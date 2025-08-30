@@ -1,4 +1,4 @@
-'use client'; // Cần client component để xử lý các nút
+'use client';
 
 import { MOCK_REVIEWS } from "@/lib/mockdata";
 import { Button } from "@/components/ui/button";
@@ -28,8 +28,6 @@ export default function AdminReviewsPage() {
         <h1 className="text-3xl font-bold">Quản lý Đánh giá</h1>
         {/* <p className="text-muted-foreground">Duyệt các đánh giá và bình luận do người dùng đóng góp.</p> */}
       </div>
-
-      {/* Phần đánh giá chờ duyệt */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -69,8 +67,6 @@ export default function AdminReviewsPage() {
           </div>
         </CardContent>
       </Card>
-      
-      {/* Phần đánh giá đã duyệt (để tham khảo) */}
        <Card className="mt-8">
         <CardHeader>
           <CardTitle>Lịch sử đánh giá đã duyệt ({approvedReviews.length})</CardTitle>

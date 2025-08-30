@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState, useMemo } from "react";
-import { MOCK_DOCUMENTS } from "@/lib/mockdata";
+import { MOCK_DOCUMENTS, MOCK_COURSES } from "@/lib/mockdata";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -16,18 +16,20 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AdminDocument } from "@/lib/mockdata"; 
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from "@/components/ui/dialog";
+import DocumentForm from "@/components/admin/documentForm"; // Assuming this form component exists
 
 type FilterStatus = "all" | "approved" | "pending";
 
 export default function AdminDocumentsPage() {
   const [filter, setFilter] = useState<FilterStatus>("all");
+  const [modalOpen, setModalOpen] = useState(false);
+  const [editDocument, setEditDocument] = useState<AdminDocument | null>(null);
 
   const handleApprove = (docId: string) => {
     alert(`Đã duyệt tài liệu ID: ${docId}. (Logic thật sẽ gọi API)`);
-    // Trong ứng dụng thật, bạn sẽ gọi API và refetch lại data
-  };
-
-  // Sử dụng useMemo để tối ưu hóa việc lọc, chỉ tính toán lại khi filter hoặc MOCK_DOCUMENTS thay đổi
+  }; 
+  
   const filteredDocuments = useMemo(() => {
     if (filter === "approved") {
       return MOCK_DOCUMENTS.filter(doc => doc.isApproved);
@@ -45,10 +47,8 @@ export default function AdminDocumentsPage() {
           <h1 className="text-3xl font-bold">Quản lý Tài liệu</h1>
           {/* <p className="text-muted-foreground">Duyệt, sửa, xóa các tài liệu trong hệ thống.</p> */}
         </div>
-        <Button asChild>
-          <Link href="/admin/documents/new">
-            <PlusCircle className="mr-2 h-4 w-4" /> Thêm tài liệu
-          </Link>
+        <Button onClick={() => { setEditDocument(null); setModalOpen(true); }}>
+          <PlusCircle className="mr-2 h-4 w-4" /> Thêm tài liệu
         </Button>
       </div>
 
@@ -105,8 +105,8 @@ export default function AdminDocumentsPage() {
                                 Duyệt tài liệu
                               </DropdownMenuItem>
                             )}
-                            <DropdownMenuItem asChild>
-                              <Link href={`/admin/documents/edit/${doc.id}`}>Sửa</Link>
+                            <DropdownMenuItem onClick={() => { setEditDocument(doc); setModalOpen(true); }}>
+                              Sửa
                             </DropdownMenuItem>
                             <DropdownMenuItem className="text-red-600">Xóa</DropdownMenuItem>
                           </DropdownMenuContent>
@@ -126,6 +126,21 @@ export default function AdminDocumentsPage() {
           </div>
         </CardContent>
       </Card>
+
+      <Dialog open={modalOpen} onOpenChange={setModalOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{editDocument ? "Chỉnh sửa tài liệu" : "Thêm tài liệu mới"}</DialogTitle>
+            <DialogClose />
+          </DialogHeader>
+          <DocumentForm
+            initialData={editDocument}
+            courses={MOCK_COURSES}
+            onSuccess={() => { setModalOpen(false); setEditDocument(null); }}
+            onCancel={() => { setModalOpen(false); setEditDocument(null); }}
+          />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

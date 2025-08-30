@@ -1,37 +1,25 @@
-'use client'; // QUAN TRỌNG: Chuyển thành Client Component để có thể tương tác
+'use client';
 
 import Link from "next/link";
-import { useState } from "react"; // Import useState để quản lý trạng thái filter
-import { MOCK_COURSES, MOCK_TEACHERS } from "@/lib/mockdata"; // Sửa lại đường dẫn nếu cần
-import { FACULTIES } from "@/lib/constants"; // Import danh sách khoa
+import { useState } from "react"; 
+import { MOCK_COURSES, MOCK_TEACHERS } from "@/lib/mockdata"; 
+import { FACULTIES } from "@/lib/constants"; 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { MoreHorizontal, PlusCircle } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"; // Import component Select
-
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import TeacherForm from "@/components/admin/teacherForm";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from "@/components/ui/dialog"; 
 export default function AdminTeachersPage() {
-  // State để lưu trữ khoa đang được chọn để lọc
   const [selectedFaculty, setSelectedFaculty] = useState<string>("all");
-
-  // Logic lọc danh sách giảng viên dựa trên state
+  const [modalOpen, setModalOpen] = useState(false);
+  const [editTeacher, setEditTeacher] = useState<any>(null);
   const filteredTeachers = selectedFaculty === "all"
     ? MOCK_TEACHERS
     : MOCK_TEACHERS.filter(teacher => teacher.faculty === selectedFaculty);
 
-  // Hàm helper để lấy tên đầy đủ của khoa từ mã khoa
   const getFacultyLabel = (facultyValue: string) => {
     return FACULTIES.find(f => f.value === facultyValue)?.label || facultyValue;
   };
@@ -43,14 +31,10 @@ export default function AdminTeachersPage() {
           <h1 className="text-3xl font-bold">Quản lý Giảng viên</h1>
           {/* <p className="text-muted-foreground">Thêm, sửa, xóa thông tin các giảng viên.</p> */}
         </div>
-        <Button asChild>
-          <Link href="/admin/teachers/new">
-            <PlusCircle className="mr-2 h-4 w-4" /> Thêm giảng viên
-          </Link>
+        <Button onClick={() => { setEditTeacher(null); setModalOpen(true); }}>
+          <PlusCircle className="mr-2 h-4 w-4" /> Thêm giảng viên
         </Button>
       </div>
-
-      {/* --- BỘ LỌC THEO KHOA --- */}
       <div className="flex justify-end my-4">
         <Select value={selectedFaculty} onValueChange={setSelectedFaculty}>
           <SelectTrigger className="w-[280px]">
@@ -66,22 +50,18 @@ export default function AdminTeachersPage() {
           </SelectContent>
         </Select>
       </div>
-      {/* ------------------------- */}
-
       <Card>
         <CardContent className="pt-6">
           <Table>
             <TableHeader>
               <TableRow>
                 <TableHead>Tên giảng viên</TableHead>
-                {/* --- THÊM CỘT MỚI --- */}
                 <TableHead>Khoa phụ trách</TableHead>
                 <TableHead>Số môn phụ trách</TableHead>
                 <TableHead className="text-right">Hành động</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {/* --- SỬ DỤNG DANH SÁCH ĐÃ LỌC --- */}
               {filteredTeachers.map((teacher) => {
                 const coursesTaughtCount = MOCK_COURSES.filter(course => 
                   course.teachers.some(t => t.id === teacher.id)
@@ -90,7 +70,6 @@ export default function AdminTeachersPage() {
                 return (
                   <TableRow key={teacher.id}>
                     <TableCell className="font-medium">{teacher.name}</TableCell>
-                    {/* --- HIỂN THỊ DỮ LIỆU CỘT MỚI --- */}
                     <TableCell>{getFacultyLabel(teacher.faculty || "")}</TableCell>
                     <TableCell>{coursesTaughtCount}</TableCell>
                     <TableCell className="text-right">
@@ -101,8 +80,8 @@ export default function AdminTeachersPage() {
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                          <DropdownMenuItem asChild>
-                              <Link href={`/admin/teachers/edit/${teacher.id}`}>Sửa</Link>
+                          <DropdownMenuItem onClick={() => { setEditTeacher(teacher); setModalOpen(true); }}>
+                            Sửa
                           </DropdownMenuItem>
                           <DropdownMenuItem className="text-red-600">
                             Xóa
@@ -117,6 +96,22 @@ export default function AdminTeachersPage() {
           </Table>
         </CardContent>
       </Card>
+
+      {/* Modal for create/edit teacher */}
+      <Dialog open={modalOpen} onOpenChange={setModalOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{editTeacher ? "Chỉnh sửa giảng viên" : "Thêm giảng viên"}</DialogTitle>
+            <DialogClose />
+          </DialogHeader>
+          <TeacherForm
+            initialData={editTeacher}
+            onSuccess={() => { setModalOpen(false); setEditTeacher(null); } }
+            onCancel={() => { setModalOpen(false); setEditTeacher(null); } } 
+            allCourses={MOCK_COURSES}
+          />
+        </DialogContent>
+      </Dialog>
     </>
   );
 }

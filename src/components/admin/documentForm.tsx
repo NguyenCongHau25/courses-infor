@@ -11,10 +11,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 
 interface DocumentFormProps {
     initialData?: AdminDocument | null;
-    courses: Pick<Course, 'id' | 'name' | 'code'>[]; // Chỉ cần thông tin cơ bản của các môn học
+    courses: Pick<Course, 'id' | 'name' | 'code'>[]; 
+    onSuccess: () => void;
+    onCancel: () => void;
 }
 
-// Danh sách các loại tài liệu có thể chọn
 const DOCUMENT_TYPES = ["Slide", "Đề thi", "Bài giảng", "Tài liệu tham khảo", "Bài tập lớn"];
 
 export default function DocumentForm({ initialData, courses }: DocumentFormProps) {

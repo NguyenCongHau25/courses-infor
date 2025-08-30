@@ -18,13 +18,15 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-// Mở rộng kiểu Teacher để bao gồm danh sách các môn học và khoa phụ trách
 interface TeacherWithCourses extends Teacher {
   courses: Pick<Course, 'id' | 'name'>[];
 }
+
 interface TeacherFormProps {
     initialData?: TeacherWithCourses | null;
     allCourses: Pick<Course, 'id' | 'name' | 'code'>[];
+    onSuccess: () => void;
+    onCancel: () => void;
 }
 
 const FACULTIES = [
@@ -44,7 +46,6 @@ export default function TeacherForm({ initialData, allCourses }: TeacherFormProp
     const [selectedCourses, setSelectedCourses] = useState<string[]>(
         initialData?.courses?.map(c => c.id) || []
     );
-    // State cho khoa, đảm bảo có giá trị mặc định là chuỗi rỗng
     const [faculty, setFaculty] = useState<string>(initialData?.faculty || "");
 
     const courseOptions: OptionType[] = allCourses.map(course => ({

@@ -19,9 +19,9 @@ export default function AdminDashboardPage() {
     <>
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold">Dashboard</h1>
-        <Button asChild>
+        {/* <Button asChild>
           <Link href="/admin/courses/new">Thêm môn học mới</Link>
-        </Button>
+        </Button> */}
       </div>
 
       {/* Phần thống kê tổng quan */}
